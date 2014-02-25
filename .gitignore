@@ -12,8 +12,7 @@
 # Mac
 .DS_Store
 
-# Maven
-log/
-target/
+# executeables
+bin/
 
 # Windows
