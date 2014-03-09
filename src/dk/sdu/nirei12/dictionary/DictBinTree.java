@@ -9,7 +9,6 @@ public class DictBinTree implements Dict {
 	@Override
 	public void insert(int k) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
