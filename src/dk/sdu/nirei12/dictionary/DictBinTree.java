@@ -24,7 +24,7 @@ public class DictBinTree implements Dict {
 
 	@Override
 	public int[] orderedTraversal() {
-		ArrayList<Integer> list = new ArrayList<>();
+		ArrayList<Integer> list = new ArrayList<Integer>();
 		inorderTreeWalk(this.root, list);
 		
 		int[] new_list = new int[list.size()];
