@@ -1,5 +1,8 @@
 package dk.sdu.nirei12.priorityqueue;
 
+/**
+ * @author nirei12 & thora12
+ */
 public class Element {
 	
 	public int key;
