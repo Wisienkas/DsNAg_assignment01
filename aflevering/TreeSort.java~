@@ -1,9 +1,4 @@
-package dk.sdu.nirei12.TreeSort;
-
 import java.util.Scanner;
-
-import dk.sdu.nirei12.dictionary.Dict;
-import dk.sdu.nirei12.dictionary.DictBinTree;
 
 /**
  * 
@@ -16,7 +11,7 @@ public class TreeSort {
 		
 		Dict dickTreeSort = new DictBinTree();
 		
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(args[0]);
         while (scanner.hasNextInt()) {
             int nextInt = scanner.nextInt();
             dickTreeSort.insert(nextInt);

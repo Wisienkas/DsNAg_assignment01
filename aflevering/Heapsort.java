@@ -1,9 +1,3 @@
-package dk.sdu.nirei12.Heapsort;
-
-import dk.sdu.nirei12.priorityqueue.Element;
-import dk.sdu.nirei12.priorityqueue.PQ;
-import dk.sdu.nirei12.priorityqueue.PQHeap;
-
 import java.util.Scanner;
 
 /**
@@ -15,6 +9,7 @@ public class Heapsort {
         PQ heapSort = new PQHeap(10);
 
         Scanner scanner = new Scanner(System.in);
+	System.out.println("======");
         while (scanner.hasNextInt()) {
             int nextInt = scanner.nextInt();
             heapSort.Insert(new Element(nextInt, null));
