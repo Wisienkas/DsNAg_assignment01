@@ -8,7 +8,7 @@ import dk.sdu.nirei12.priorityqueue.PQHeap;
 public class CharCountHeap {
 	
 	int[] chars = new int[256];
-	int lowest = 0;
+	static int lowest = 0;
 	
 	public CharCountHeap(){
 		

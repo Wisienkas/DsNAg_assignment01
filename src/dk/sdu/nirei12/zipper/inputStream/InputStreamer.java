@@ -35,10 +35,8 @@ public class InputStreamer {
 	 */
 	public int readByte() throws IOException {
 		int result = this.br.read();
-		if(result == -1){
-//			System.out.println("EOF!");
-		}
-		return result < 256 ? result : -2;
+		if( result >= 256 ) result = 0xb6;
+		return result;
 	}
 
 	/**
@@ -51,7 +49,12 @@ public class InputStreamer {
 		int result = 0;
 		try{
 			if(btb == null || !btb.hasNextBit()){
-				btb = new ByteToBits(readByte());
+				int by = readByte();
+				if(by == -1){
+					return -1;
+				}else{
+					btb = new ByteToBits(by);
+				}
 			}
 			result += btb.nextBit() ? 1 : 0;
 		}catch (EOFException eof){

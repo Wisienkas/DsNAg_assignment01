@@ -41,6 +41,12 @@ public class OutputStreamer {
 	}
 	
 	public void endFile() throws IOException{
+		if(btb != null){
+			while (!btb.filled()) {
+				btb.addBit(true);
+			}
+			writeByte(btb.getResult());
+		}
 		bw.flush();
 		bw.close();
 	}

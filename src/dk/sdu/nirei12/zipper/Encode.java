@@ -103,9 +103,17 @@ public class Encode implements Runnable{
 				if(input == -2 ){
 					input = 0;
 				}
+				chars[input]--;
+				if(chars[input] < 0){
+					System.out.println("more chars of this kind found that first found??!?!");
+				}
+//				String path = "";
 				for (boolean b : (boolean[])map.get(input)) {
 					os.writeBit(b);
+//					path += b ? "1" : "0";
 				}
+//				System.out.println(path);
+//				path = "";
 				input = is.readByte();
 			}
 			os.endFile();

@@ -62,11 +62,22 @@ public class Decoder implements Runnable {
 			int input = is.readBit();
 			long loops = 0;
 			CharTreeNode node = ctn;
+//			String path = "";
+			node.key--;
 			while (input != -1 && loops < totalChars) {
 				node = (input == 1) ? node.right : node.left;
+//				path += (input == 1) ? "1" : "0";
+				node.key--;
 				if(node.data != null){
+//					System.out.println(path);
+//					path = "";
+					if(node.key < 0){
+//						System.out.println("key used more than it should be");
+//						System.out.println("KEY: " + (int)node.data);
+					}
 					os.writeByte((int) node.data);
 					node = ctn;
+					node.key--;
 					loops++;
 				}
 				input = is.readBit();
