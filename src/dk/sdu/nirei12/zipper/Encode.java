@@ -40,7 +40,6 @@ public class Encode implements Runnable{
 	
 	private File in;
 	private File out;
-	private Map<Object, Object> map;
 	private int[] chars = new int[256];
 	private long totalChars;
 	
@@ -57,10 +56,11 @@ public class Encode implements Runnable{
 		countingUp(is, cch);
 		// creates the optimized tree
 		CharTreeNode ctn = cch.processOptimizedTree();
-		makeMap(ctn);
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		cch.makeMap(ctn, map);
 		OutputStreamer os = new OutputStreamer(out);
 		is = new InputStreamer(in);
-		convert(os, is);
+		convert(os, is, map);
 		long outSize = readSize(out);
 		writeStatistics(outSize);
 	}
@@ -87,34 +87,23 @@ public class Encode implements Runnable{
 		return bytes;
 	}
 
-	private void makeMap(CharTreeNode ctn) {
-		if(ctn.left != null && ctn.right != null){
-			this.map = new HashMap<Object, Object>();
-			String s = "";
-			if(!s.isEmpty()){
-				System.err.println("String should be empty");
-				System.exit(1);
-			}
-			CharTreeNode.traversal(this.map, ctn, s);
-		}
-	}
 
 	/** Write from input file to output file */
-	private void convert(OutputStreamer os, InputStreamer is) {
+	private void convert(OutputStreamer os, InputStreamer is, Map map) {
 		System.out.println("Writing to new file!");
 		try {
 			os.startStream();
 			is.setupStream();
 			makeHeader(os);
 			int input = is.readByte();
-			if(this.map == null){
+			if(map == null){
 				System.out.println("FML!");
 			}
 			while(input != -1){
 				if(input == -2 ){
 					input = 0;
 				}
-				for (boolean b : (boolean[])this.map.get(input)) {
+				for (boolean b : (boolean[])map.get(input)) {
 					os.writeBit(b);
 				}
 				input = is.readByte();

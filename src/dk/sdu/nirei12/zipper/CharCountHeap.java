@@ -1,5 +1,7 @@
 package dk.sdu.nirei12.zipper;
 
+import java.util.Map;
+
 import dk.sdu.nirei12.priorityqueue.PQ;
 import dk.sdu.nirei12.priorityqueue.PQHeap;
 
@@ -37,6 +39,17 @@ public class CharCountHeap {
 			optimizeHeap(pq);
 		}
 		return (CharTreeNode) pq.extractMin();
+	}
+
+	public void makeMap(CharTreeNode ctn, Map map) {
+		if(ctn.left != null && ctn.right != null && map != null){
+			String s = "";
+			if(!s.isEmpty()){
+				System.err.println("String should be empty");
+				System.exit(1);
+			}
+			CharTreeNode.traversal(map, ctn, s);
+		}
 	}
 	
 	private void optimizeHeap(PQ pq) {

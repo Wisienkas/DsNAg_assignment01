@@ -1,0 +1,1085 @@
+Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+Resumé
+Whitewaters Shopping Center Inc. er et indkøbscenter, som ønsker at få eksisterende kunder til at handle
+mere i centeret. De vil gerne have lavet et loyalitetsprogram, som kan tiltrække nye kunder til og fastholde
+de gamle. Dette bliver opnået ved at indføre et pointsystem, som kunderne får ved at købe ind, og som kan
+bruges på fordele.
+Ved hjælp af Unified Process(UP) modellen er der blevet udviklet et pointsystem. Der er taget udgangspunkt
+i tilføjelse af point og med udgangspunkt i medlemsstatus. Medlemmer kan have tre forskellige rangeringer,
+som bliver afgjort af, hvor mange penge de køber for i løbet af et år. Ved hjælp af UP, er der blevet etableret
+krav i inceptionsfasen, hvor der blev udviklet brugsmønstre. Disse brugsmønstre er brugt til at dække over,
+hvordan systemet skal bruges. Efter at have færdiggjort inceptionsfasen, kommer elaborationsfasen. Her blev
+der lavet diagrammer, som i sidste ende blev implementeret som kode til et endeligt produkt. Ved hjælp af
+tre iterationer i elaborationsfasen, blev målsætningen for projektet nået.
+Der er blevet gjort brug af brugsmønstre og diagrammer. Diagrammerne omfatter interaktionsdiagrammer,
+domænemodeller, sekvensdiagrammer i analyse og design, klassediagrammer i analyse og design samt
+kontrakter. Disse er blevet brugt, med hensigt til at kunne videreudvikle systemet, samt dokumentere hvad
+der er blevet lavet.
+Pointsystemet fungerer ved, at der bliver oprettet en transaktion imellem et medlem og en butik. Der bliver
+taget højde for, hvilken medlemsrangering medlemmet har, og om medlemmet også skal opgraderes til
+næste rangering. Alt dette bliver gemt i en database, så dataene kan tilgås senere, hvis centeret ønsker at se
+hvilke produkter, medlemmet køber i hvilke butikker.
+Alt i alt vil de følgende 30 sider omhandle selve udviklingen af produktet - softwaren til WA. Fokus for
+udviklingen af produktet var et pointsystem, Premium Point Manager, der kunne bruges til at tiltrække flere
+kunder til indkøbscenteret, og dermed få dem til at handle der oftere. Samtidigt var formålet med projektet
+at få en forståelse af de faglige termer, der kræves for dette projektforløb.
+S i d e 1 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+Forord
+Hensigten med denne rapport er at redegøre for og give en teknisk dokumentation for det udviklede
+software. Rapporten kommer ind på de nødvendige faglige termer indgået i UP-metoden, og dermed
+udarbejdet casen, der blev uddelt af Netcompany. Desuden omhandler rapporten modelleringen af systemet
+på flere forskellige modelniveauer til og med kodning ud fra meget detaljerede modeller.
+Udarbejdelsen af denne rapport har været en formel del af andet semester, hvilket derfor er en forudsætning
+for at kunne gå til eksamen. Rapportens målgruppe er derfor underviser og sensor, som bruges som
+fundament til den senere mundtlige eksamen.
+Netcompany, der har stillet casen, har været til rådighed igennem kundemøder, da det kun har været dem,
+der har kunnet specificere casen, når tvivl omkring dette har opstået. Derudover har vejleder Erik Sørensen
+været meget behjælpelig, når behovet for faglig assistance har opstået. Derfor skal der lyde tak til
+Netcompany for den givne case, samt Erik Sørensen for et godt samarbejde og kommunikation.
+Dato for aflevering: 31-05-2013
+Forfatternes underskrifter:
+Daniel Østergaard Sørensen Hanan Hussein Nikolaj Kilden Olssen
+Nikolaj Schaldemose Reibke Sanjeev Yoganathan Thomas Heine Rasmussen
+S i d e 2 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+Indholdsfortegnelse
+1 Indledning .................................................................................................................................................. 8
+2 Organisation .............................................................................................................................................. 9
+3
+4
+5
+6
+7
+2.1 Customer Segments........................................................................................................................... 9
+2.2 Value Propositions ............................................................................................................................. 9
+2.3 Customer Relationships ..................................................................................................................... 9
+2.4 Revenue Streams ............................................................................................................................... 9
+2.5 Key Resources .................................................................................................................................. 10
+2.6 Key Activities.................................................................................................................................... 10
+2.7 Key Partnerships .............................................................................................................................. 10
+2.8 Cost Structure .................................................................................................................................. 10
+Krav .......................................................................................................................................................... 11
+3.1 Opstilling af krav .............................................................................................................................. 11
+3.2 Brugsmønstermodel ........................................................................................................................ 12
+3.3 Brugsmønsterbeskrivelser ............................................................................................................... 13
+3.4 Domænemodel ................................................................................................................................ 15
+Analyse .................................................................................................................................................... 16
+4.1 Udvidet Brugsmønster ..................................................................................................................... 16
+4.2 Analyseklassediagram ..................................................................................................................... 16
+4.3 Defination af klasse ......................................................................................................................... 18
+4.4 Systeminteraktionsdiagram ............................................................................................................. 19
+4.5 Kontrakter ........................................................................................................................................ 19
+4.6 Kort konklusion ................................................................................................................................ 20
+Design ...................................................................................................................................................... 21
+5.1 Designklassediagrammet ................................................................................................................. 22
+5.2 Designsekvensdiagram .................................................................................................................... 24
+5.3 Lagdeling .......................................................................................................................................... 25
+5.4 Kort konklusion ................................................................................................................................ 25
+Database .................................................................................................................................................. 26
+6.1 Første iteration ................................................................................................................................ 26
+6.2 Anden iteration ................................................................................................................................ 27
+6.3 Tredje iteration ................................................................................................................................ 27
+6.4 Triggers ............................................................................................................................................ 28
+implementering og test ........................................................................................................................... 29
+S i d e 3 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+7.1 Designklassediagram til kode .......................................................................................................... 29
+7.2 Designinteraktionsdiagram til kode................................................................................................. 29
+7.3 E/R diagram til SQL .......................................................................................................................... 31
+7.4 Kommunikation imellem Java kode og database ............................................................................ 31
+7.5 Test .................................................................................................................................................. 32
+8 Evaluering ................................................................................................................................................ 33
+9 Konklusion ............................................................................................................................................... 34
+10
+Litteraturliste ....................................................................................................................................... 35
+S i d e 4 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+Redaktionelt
+Alle i gruppen har gennemrettet og set alle afsnit i rapporten igennem. Dette betyder at alle i gruppen har
+været med og haft en finger i hvert af afsnittene.
+S i d e 5 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+Læsevejledning
+Rapporten skal læses fra start til slut. Bilag har den virkning at vi gennem selve produktrapporten kun
+fremhæver et eksempel. Bilag vil indeholde yderligere eksempler, med eventuelt tekst tilhørende eksemplet.
+Procesrapporten giver et indblik i hvordan gruppens arbejde har været gennem forløbet, men også hvordan
+metoderne har været brugt, kort forklaret. Der vil i produktrapporten være en mere beskrivende tekst af
+hvordan de forskellige aktiviteter, iterationer og faser er opfyldt ved hjælp af diagrammer og små eksempler
+af kode.
+Der bruges det samme gennemgående eksempel i hele produktrapporten, for at læseren ikke skal tage
+hensyn til noget der ikke har været forklaret i en mindre avanceret sammenhæng.
+Fodnoter gennem rapporten linker til materiale i bilaget via den mappeinddeling der findes på cd’en. Den
+kan yderligere linke til links på nettet. Fodnoterne bruges generelt til at henvise yderligere materiale, men
+kan også indeholde materiale direkte relateret til teksten, derfor bedes der tages hensyn til hvordan teksten
+og omkringliggende figurer omtales i teksten.
+S i d e 6 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+Figuroversigt
+Figur 1 – Viser de forskellige krav opstillet til casen ....................................................................................... 11
+Figur 2 – Viser de supplerende krav ................................................................................................................ 12
+Figur 3 - Brugsmønstermodel .......................................................................................................................... 13
+Figur 4 - Viser en kort beskrivelse af brugsmønstret B06 ............................................................................... 14
+Figur 5 - Viser en udvidet brugsmønsterbeskrivelse af brugsmønstret B06 ................................................... 14
+Figur 6 - Viser domænemodellen over klasser der udgøre systemet ............................................................. 15
+Figur 7 - Analyseklassediagram ....................................................................................................................... 17
+Figur 8 - Nærbillede af klassen medlem fra designklassediagram .................................................................. 18
+Figur 9 - Systeminteraktionsdiagram ............................................................................................................... 19
+Figur 10 - Viser kontrakter ............................................................................................................................... 19
+Figur 11 - Designklassediagram ....................................................................................................................... 22
+Figur 12 - Viser medlemsentiteten fra designklassediagrammet .................................................................... 23
+Figur 13 - Viser lagdeling ................................................................................................................................. 25
+Figur 14 - Viser E/R diagrammet ...................................................................................................................... 26
+Figur 15 - SQL, der sammenkæder de to tabeller ........................................................................................... 27
+Figur 16 - Viser multiplier ................................................................................................................................ 27
+Figur 17 - Viser før/efter af SQL-dato .............................................................................................................. 28
+Figur 18 - Viser scriptet over transaktion ........................................................................................................ 28
+Figur 19 - Viser starten af en trigger ................................................................................................................ 28
+Figur 20 - Viser eksempel på kode skelettet ................................................................................................... 29
+Figur 21 - Designinteraktionsdiagram for opretTransaktion ........................................................................... 30
+Figur 22 – Viser implementering af ’opretTransaktion’ .................................................................................. 31
+Figur 23 - Viser SQL oprettet efter E/R diagrammet ....................................................................................... 31
+Figur 24 - Viser hvordan koden er opbygget til at kommunikere med databasen ......................................... 32
+S i d e 7 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+1 I NDLEDNING
+Dette projekt er målrettet mod udviklingen af et software system, som understøtter en case fremstillet af
+Netcompany. Der var i den forbindelse ikke fastlagt en opgave på forhånd. Casen vi blev præsenteret for
+rummede meget mere materiale og potentielle opgaver, end det var muligt at færdiggøre under dette
+projektforløb. Derfor var det gruppens eget ansvar at vælge den del af casen, der virkede mest appellerende.
+Det skulle samtidigt begrænses til et omfang, der var overskuelig i forhold til gruppens størrelse og
+ambitioner. Disse blev bearbejdet og præsenteret i inceptionsdokumentet 1 .
+I denne del af rapporten bliver læseren orienteret omkring selve udviklingen af produktet - softwaren til WA.
+Fokus for udviklingen af produktet var et pointsystem, Premium Point Manager, som en del af et
+loyalitetsprogram, der kunne bruges til at få eksisterende kunder til fortsat at benytte centeret og få dem til
+at handle der oftere. Samtidigt var formålet med projektet at få en forståelse af de faglige termer, der kræves
+indlært for at udføre dette projektforløb. I forløbet skulle der gøres brug af Unified Proces, hvor der kun
+skulle være fokus på to af de fire faser - inceptionsfasen og elaborationsfasen - hvor der dertil skulle udvikles
+krav og modeller, som var relevante for udviklingen af softwaren.
+I de følgende afsnit vil der blive forklaret, hvordan modellerne er blevet udviklet, hvad de bruges til og hvad
+de kunne føres videre til. Ud fra modellerne blev der implementeret et Java program, hvor der hertil skulle
+gøres brug af SQL, for at udarbejde en relationel database.
+1
+Bilag\Inceptionsfasen \InceptionsdokumentV4.pdf
+S i d e 8 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+2 O RGANISATION
+Casen vi har fået stillet er omkring WA. I dette afsnit bliver forrentningsmodellen analyseret og beskrevet ud
+fra ”Osterwalders Business Model”. Analysen beskriver hovedsageligt forretningsmæssige fordele, som WA
+har som et indkøbscenter, men også til sammenligning med andre indkøbscentre. Der bliver beskrevet, hvilke
+værdier WA har, i form af faciliteter og service de tilbyder deres kunder, hvilket er butikkerne. Desuden
+bliver nøgle faktorer i WA beskrevet.
+2.1 C USTOMER S EGMENTS
+WA betragter butikkerne som deres kunder, eftersom de tjener penge på udlejning af centeret til butikkerne,
+og slutbrugerne som et ”mass market”. Butikkerne får flere kunder ved, at WA gør centeret mere attraktivt,
+så de får kunderne til at tilbringe ekstra tid i centeret.
+WA vil igennem dette loyalitetsprogram kunne se, hvordan slutforbrugernes forbrugsmønstre er. Da de er
+interesseret i at finde en sammenhæng i forbrugsmønstrene, således at de kan optimere ydelsen, de tilbyder
+slutforbrugerne, gøres dette ved at indsamle data baseret på transaktioner.
+2.2 V ALUE P ROPOSITIONS
+WA sørger for at yde butikkerne en ”klar-til-brug” lokaler, der ikke kræver vedligeholdelse eller lign. fra
+butikkernes side af. De skal blot betale lejen, hvorigennem WA også yder marketing. På den måde får
+butikkerne en form for convenience og desuden accessibility, da butikkerne ikke behøver at tiltrække kunder
+på egen vis. Det er en ”getting-the-job-done” løsning for butikkerne, altså butikkerne har intet at skulle
+vedligeholde.
+Ydelsen WA tilbyder butikkerne, er en ”risk reduction”, da de indirekte sikre butikkerne en stor kundestrøm.
+Det vil medføre, at flere og flere butikker vil finde WA et meget attraktivt sted at leje lokaler, da det samtidigt
+sikre butikkerne en stabil omsætning, i form af god opreklamering af indkøbsmulighederne ved at handle i
+et indkøbscenter.
+2.3 C USTOMER R ELATIONSHIPS
+WA tilbyder kunderne en automatiseret service. Hvor de, igennem en selvbetjening, kan få hjælp og
+instrukser efter behov.
+Centerets samarbejde med forbrugerne får butikkernes salg til at stige. Desuden er kunder og butikker
+knyttet sammen af det pointsystem, som belønner kunderne for troskab til centeret.
+2.4 R EVENUE S TREAMS
+WA’s revenue streams vil komme fra udlejning af deres faciliteter. Det vil desuden også komme fra
+kundeparkering, procentvis andel af butikkernes omsætning samt satser fra solgte biografbilletter – disse
+kaldet brokerage fees. Revenue streams vil blive påvirket af et eventuelt faldende kundetal.
+S i d e 9 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+2.5 K EY R ESOURCES
+WA’s key resource på nuværende tidspunkt er de faciliteter, de tilbyder butikkerne og slutforbrugerne.
+Desuden er centeret i sig selv også en key ressource, da centeret i sig selv har en værdi og dermed udgør en
+resurse. Deres loyalitetsprogram vil blive en vigtig key ressource, da den vil kunne være med til at tiltrække
+flere kunder og evt. fastholde de nuværende. Idet slutforbrugernes data indsamles, vil de kunne bruges til at
+danne overblik over forbrugsmønstre, og dermed ændre services og faciliteter efter deres behov.
+2.6 K EY A CTIVITIES
+WA’s key activities vil igennem loyalitetsprogrammet være den nye bonusordning med Premium Points, fri
+parkering og lounge med fri WiFi. Disse fordele for slutforbrugerne er alle en tilføjelse til WA’s value position.
+WA vil være en desuden platform, hvor slutforbrugerne kan foretage sig størstedelen af indkøbene, og
+dermed både spare tid og optjene Premium Points til senere indkøb.
+2.7 K EY P ARTNERSHIPS
+WA’s key partner er butikkerne, da det er i samarbejde med dem, kundetallet vil stige. De har begge et fælles
+mål, hvilket er at få en større omsætning. Idet begge arbejder for at tiltrække kunder til centeret, vil de
+automatisk reducere en eventuel risiko for konkurrenter, da både andre butikker og slutforbrugere, vil
+foretrække at handle i et center og ikke mindst grundet et loyalitetsprogram.
+2.8 C OST S TRUCTURE
+Med deres loyalitetsprogram, vil WA gå fra en cost-driven cost structure til en value-driven cost structure.
+Om end udgifterne er store, vil det i sidste ende give en større værdi for slutforbrugeren at foretage sit køb i
+WA, da de som tidligere nævnt får flere fordele end blot varen til en foretrukken pris, samt service. Da WA
+tilbyder services og faciliteter alt efter form af medlemskab, giver et en mere personlig service, som er en
+value-driven cost structure.
+S i d e 10 | 35Projektgruppe - 2
+Syddansk Universitet
+Det Tekniske Fakultet
+SB2/IT2-ORG-U1-1
+Produktrapport
+31-05-2013
+3 K RAV
+I det følgende afsnit vil kravene til systemet, korte- og detaljerede brugsmønstre samt et dertilhørende
+domænemodel blive beskrevet.
+3.1 O PSTILLING AF KRAV
+For at udarbejde kravene til produktet, blev der lavet nogle funktionelle og ikke funktionelle krav. Disse blev
+sat op, således at der blev skabt et overblik over, hvad produktets egentlige funktionalitet skulle være. Det
+blev lavet ved at tage udgangspunkt i Premium Point fra casen 2 . Det var med fokus på pointoverførelser, at
+kravene skulle stilles op, og hvordan det skulle afvikles. Efter at have diskuteret hvad der er relevant for
+produktet at kunne, blev de funktionelle krav sat op. De kan ses i den nedenstående tabel.
+Id Beskrivelse
+F01 Centeret skal kunne slå kundeinformation op.
+F02 Centermedarbejder skal kunne tilføje og fjerne Premium Point til et medlem
+manuelt.
+Systemet skal gemme data om hver transaktion (Dato/tid, hvem har lavet
+transaktionen, medlems konto, beløb).
+Systemet skal kunne lave finans-rapporter for et givent tidspunkt (Både rapport
+over penge til en bestemt butik og penge til alle butikker).
+Kundens medlems-type skal revideres af systemet efter hver transaktion. (Man
+er Bronze, hvis man har brugt under 5000 kr., Silver hvis man har brugt under
+10 000kr, og Gold hvis man har brugt over 10 000kr)
+Systemet skal indeholde 3 forskellige medlems-typer: Bronze, Silver og Gold.
+F03
+F04
+F05
+F06
+F07
+F09 Systemet tildeler Premium Points på baggrund af de køb, der foretages i
+butikkerne. (Multipler: 1.0 i Bronze, 1.5 i Silver, 2.0 i Gold).
+Systemet skal fjerne kundens Premium Points, hvis man returnerer en vare og
+får penge retur (F.eks. hvis man har fortrudt købet, eller varen går i stykker).
+Systemet skal revidere kundens medlemstype hvert år
+F10 Centeret skal kunne oprette et nyt medlem.
+F11 Centeret skal kunne ændre medlemsoplysninger.
+F12 Centeret skal kunne hente oplysninger om transaktioner.
+F08
+Figur 1 – Viser de forskellige krav opstillet til casen
+F04 blev ikke lavet, da der ikke var fokus på funktionaliteten i de første 3 iterationer, men mere hvad systemet
+skulle kunne, så det kunne opfylde de vigtigste krav. Disse krav er opstillet i inceptionsdokumentet 3
+2
+3
+Bilag\Projektoplæg.pdf
+(Bilag\Inceptionsfasen\InceptionsdokumentV4.docx) se side 6
+S i d e 11 | 35Projektgruppe - 2
+Syddansk Universitet
+Det Tekniske Fakultet
+SB2/IT2-ORG-U1-1
+Produktrapport
+31-05-2013
+De fleste af disse krav skulle ske automatisk. Det var også vigtigt at data, der blev gemt, tilhørte WA. Det
+skulle ikke være muligt for butikken at slå data op. De skulle bare kunne sende en transaktion af sted. Denne
+transaktion skulle så tage højde for, hvilken type medlemmet var. Og så var det vigtigt, at WA kunne slå
+informationer om medlemmet og transaktionen op.
+Efter at disse krav blev opstillet, så skulle der laves nogle ikke-funktionelle krav, så der kom restriktioner på,
+hvordan programmet skulle løse problemstillingen. Der blev opstillet to kvalitetskrav og to restriktionskrav.
+De kan ses i tabellen nedenunder.
+ID
+Kvalitets
+gruppe
+(Fe/Yd/
+Ko/Br/På
+/Si/Ve) Supplerende krav
+K01 Ikke-
+Type af Ikke-
+Funktionelt( Funktion
+K/R)
+elt
+(Prod/Org
+/Ekst)
+K
+Prod Yd K02 K Prod Yd R01
+R02 R
+R Prod
+Prod Systemet skal kunne slå
+kundeinformationer op på under
+to sekunder.
+PP transaktioner skal kunne ses på
+kontoen inden for et minut.
+Data skal gemmes i en database.
+Systemet skal udvikles i Java.
+Krydsreference til
+brugsmønstre
+(Brugsmønster ID)
+Figur 2 – Viser de supplerende krav
+Denne supplerende kravtabel giver overblik over, hvordan produktet skal bygges op. Det fremgår af det
+supplerende krav R02, at systemet skal udvikles i Java, og af R01, at der skal gemmes data i en database, og
+via K02, at data skal gemmes inden for en rimelig tidsperiode. Alt dette er gjort for at sikre, at data kun kan
+tilgås af centeret, og at det kommer til at gå flydende, så systemet virker pålideligt. Det er vigtigt at sikre sig,
+inden at man går i gang med at udvikle systemet, at man har styr på, hvad ens produkt skal kunne, og hvordan
+man sikre sig, at brugeren får den bedste brugeroplevelse ud af at bruge det.
+3.2 B RUGSMØNSTERMODEL
+Efter at der var blevet opstillet funktionelle- og ikke funktionelle krav, skulle der laves en brugsmønstermodel.
+Modellen skulle tage de aktører, som vi definerede ud fra, hvem der havde noget med systemet at gøre, og
+viser hvad de forskellige aktører kommer til at gøre i systemet. Ud fra kravene kunne det ses, at WA skulle
+fortage mange af de funktioner, som systemet skulle ende med at have. Da der så skulle opstilles en
+brugsmønstermodel, så skulle en af aktørerne være centeret. Den eneste anden aktør, som fremgår af
+kravene er tiden, hvor der efter et år, skulle revideres om et medlem skulle skifte medlemstype, eller beholde
+den de havde i forvejen. Ud fra disse oplysninger, blev der sammensat en brugsmønstermodel, som kan ses
+nedenunder. Brugsmønstermodellen kan ses af Figur 3.
+S i d e 12 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+Figur 3 - Brugsmønstermodel
+3.3 B RUGSMØNSTERBESKRIVELSER
+De korte brugsmønsterbeskrivelserne har til formål at beskrive handlingen af brugsmønsteret kort, og vise
+hvad det egentlige formål er. Disse beskrivelser er korte og er kun ment til at skabe oversigt over, hvilke
+brugsmønstre der er udtænkt. Disse brugsmønstre viser, hvad der skal ske, når man vil have systemet til at
+gøre noget bestemt. Det er afklaret fra starten, hvad der kommer til at foregå, og hvem der skal lave det.
+Misforståelser undgås, og det er muligt at planlægge, hvordan videreudviklingen skal foregå. Derudover er
+der mulighed for at samle kravene, så de kommer under en handling. Et eksempel på
+brugsmønsterbeskrivelse af brugsmønstret B06 - Opgradering af medlemstype, kan ses af Figur 4.
+Brugsmønster:
+B06 – Opgradering af medlemstype
+Formål:
+At garantere kunden det korrekte medlemskab året rundt.
+Aktører:
+Kunden(primær)
+Centeret (primær)
+S i d e 13 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+Kort beskrivelse:
+Hver gang kunden foretager sig et køb, tjekker systemet transaktionerne, for at kunne vurdere om, der
+skal ske en omrangering til et højere niveau af kundens medlemstype. Kunden modtager en mail, hvis en
+opgradering bliver foretaget.
+Figur 4 - Viser en kort beskrivelse af brugsmønstret B06
+Efter at have lavet en kort brugsmønsterbeskrivelse til alle kravene, skal disse brugsmønstre udvides, så de
+bliver mere konkrete og beskriver selve hændelsen fra start til slut i detaljer. Det bliver også afklaret, hvad
+aktøren gør, og hvad systemet gør i løbet af hændelsesforløbet af brugsmønsteret. Ved at gøre dette, så kan
+man også få taget hånd om hændelser, som ikke er tiltænkt brugsmønsteret. Det kunne være, at det var
+forbindelser til databasen, der røg, at der var blevet indtastet forkert kode, eller at der er data, der ryger,
+inden det bliver indlæst. I tilfælde af at man kommer ud for sådan en situation, så er der mulighed for at køre
+et alternativt forløb. En udvidet brugsmønsterbeskrivelse af brugsmønstret B06 - Opgradering af
+medlemstype, kan ses af Figur 5.
+Brugsmønster
+ID
+Formål
+Aktør
+Opgradering af medlemstype
+B06
+At garantere kunden den rigtige medlemstype året rundt.
+Kunden (primær)
+Centeret (primær)
+Beskrivelse
+Kunden foretager et køb, systemet tjekker samlet beløb for alle køb, for at kunne
+vurdere om der skal ske en omrangering til et højere niveau af kundens medlemstype.
+Prækondition
+En kunde foretager et køb
+Postkondition
+Kundens medlemstype bliver opgraderet
+Hændelsesforløb Aktør
+System
+1. Dette brugsmønster
+2. Systemet tjekker det samlede
+igangsættes, når en kunde
+beløb, for at se om
+foretager et køb.
+medlemstypen skal ændres.
+2.1 Hvis det samlede beløb
+overstiger grænsen for en
+opgradering af medlemstype,
+foretages dette, og en mail bliver
+sendt til kunden.
+3. Kunden modtager en mail, hvis
+en opgradering foretages.
+Alternativt
+Hvis det samlede beløb ikke overstiger grænsen for en opgradering af medlemstypen,
+forløb
+forbliver kunden på nuværende medlemstype.
+Data krav
+Kundeoplysninger
+Iteration
+2
+Ansvarlig
+Alle
+Figur 5 - Viser en udvidet brugsmønsterbeskrivelse af brugsmønstret B06
+Her er der taget højde for, at kunden ikke opnår det samlede beløb, der skal til for at blive opgraderet på et
+enkelt køb, og så skal der ikke ske ændringer i medlemstypen. Det gøres også klart, hvornår brugsmønsteret
+sættes i gang. Dette er vigtigt, når man senere i forløbet skal til at designe systemet. Ved at lave disse udvidet
+brugsmønsterbeskrivelser, er der mulighed for at få lavet en domænemodel.
+S i d e 14 | 35Projektgruppe - 2
+Syddansk Universitet
+Det Tekniske Fakultet
+SB2/IT2-ORG-U1-1
+Produktrapport
+31-05-2013
+3.4 D OMÆNEMODEL
+Domænemodellen bruges til at få en oversigt over, hvilke klasser der kommer til at udgøre systemet.
+Klasserne, der ses på Figur 6, er ikke mindre detaljerede, og viser hvilke klasser der interagerer med hinanden.
+Der er relationer til de forskellige klasser, som giver en lille indsigt over, hvad de forskellige klasser
+indeholder. På denne måde bliver det fastlagt, hvordan systemet skal bygges op i grove træk. De klasser som
+der er blevet fundet er medlemmer og medlemsstatus, da det er medlemmerne, der skal tilknyttes en
+transaktion og have point, alt efter deres medlemsstatus. Butikken er der, hvor salget foregår og skal
+tilknyttes transaktionen, så man senere kan se oplysningerne på transaktionen. Transaktionen er der også,
+da det er den handling, som sætter processen i gang. Opsætningsmodellen kan ses herunder.
+*
+*
+Handler
+Medlem
+Butik
+ButikNummer
+Navn
+MedlemsNummer
+Navn
+Alder
+*
+Tilhører
+1
+Medlemstype
+Navn
+Multiplier
+Transaktion
+Dato/tid
+Type
+Beløb(Point)
+Figur 6 - Viser domænemodellen over klasser der udgøre systemet
+Her kan man se, hvilke klasser der snakker med hvem. Ved at få denne oversigt sikre man, at klasser kun
+kommunikere sammen, hvor det er tiltænkt, at der skal være kommunikation. Det gør, at der kommer fokus
+på sikkerheden allerede fra starten, og man kan se, om både krav og brugsmønstre bliver overholdt til et vis
+punkt. På dette tidspunkt er der en glidende overgang til analyse milepælen.
+S i d e 15 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+4 A NALYSE
+Dette afsnit beskriver, hvordan gruppen er kommet fra krav-aktiviteten til analyse-aktiviteten. I de følgende
+afsnit bliver de modeller og diagrammer, der er lavet i denne aktivitet, beskrevet.
+4.1 U DVIDET B RUGSMØNSTER
+Det udvidede brugsmønster indeholder detaljer vedrørende håndtering af, hvorledes et medlem bliver
+opgraderet fra sin nuværende medlemstype, ses af Figur 5(side 14).
+Brugsmønstret tager udgangspunkt i, at medlemmet foretager sig et køb i en butik. Dette køb bliver
+registreret i systemet, som en transaktion mellem den givne butik og medlemmet, der foretager købet.
+Derefter ved oprettelsen af transaktionen i systemet tjekkes medlemmets samlede forbrug siden dets
+seneste årlige tjek.
+Hvis medlemmet opfylder den nye kvote til en medlemstype, der kræver et højere forbrug, opgraderes
+medlemmet til den nye medlemstype i forbindelse med købet.
+Brugsmønstret kræver, at kunden der foretager købet, er et medlem. Det kræves yderligere, at butikken er
+stationeret i WA’s domæne.
+4.2 A NALYSEKLASSEDIAGRAM
+Analyseklassediagrammet viser forbindelsen mellem klasserne, som kan ses på Figur 7 (side 17). Den viser
+yderligere hvilket forhold, der ligger mellem klasserne.
+S i d e 16 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+Figur 7 - Analyseklassediagram
+Medlemmet har forbindelse til en instans af en medlemstype, hvorimod en medlemstype godt kan have
+forbindelse til mange forskellige instanser af medlem. Medlemstype opnår dog aldrig en direkte forbindelse
+til hverken Center(kontroller) eller transaktion. I begge tilfælde må disse klasser først benytte en instans af
+medlem til at finde den tilhørende instans af medlemstype.
+Center(kontroller) er klassen, der laver koblinger mellem domænet og andre omkringliggende systemer.
+Dette ville være forskellige GUI’s(grafiske brugergrænseflader).
+S i d e 17 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+Analyseklassediagrammet indeholder klasser med variabler med datatype, samt operationer ude parameter
+og uden datatyper.
+4.3 D EFINATION AF KLASSE
+Et nærbillede af klassen ”Medlem”, ses på Figur 8, i analysefasen indeholder hvilke variabler, der indeholdes
+af en instans af Medlem. Disse har endvidere tildelt en datatype.
+På medlemsklassen fremgår det, at alle variabler har fået datatype på. Disse er ikke tilfældige, men nøje
+overvejet for at sikre, at databehandlingen senere bliver så optimalt som muligt. For eksempel er
+telefonnummer en String, da det ikke vil give mening, hvis det var en integer. Selvom der er tale om tal, skal
+de ikke lækkes sammen, men derimod være fastlagt som en række af tal. Premium Point derimod skal være
+double, da det er muligt at få halve point. Hvis medlemmet køber noget til 187,34 kr., så skal point kunne
+håndtere decimaltallene. Medlemstype er, ved hjælp af aggregering, af datatypen medlemstype, som bliver
+hentet fra objektet af samme navn. Det er den instans, der bliver oprettet i medlemstype klassen, som bliver
+brugt som parameter.
+Figur 8 - Nærbillede af klassen medlem fra designklassediagram
+Ikke alle datatyper er primitive datatyper, der ses for eksempel ”fødselsdag”, som består af typen ”Calendar”.
+Calendar er ligesom klassen Medlem en klasse, der indeholder nogle variabler og nogle operationer,
+”Calendar” er en indbygget klasse i Java.
+Der er også medlemstype variablen, som består af en instans af klassen Medlemstypen, som gruppen selv
+har kreeret. Hvor gruppen også selv har angivet, hvilke variabler der indeholdes i Medlemstype, samt hvilke
+operationer.
+S i d e 18 | 35Projektgruppe - 2
+Syddansk Universitet
+Det Tekniske Fakultet
+SB2/IT2-ORG-U1-1
+Produktrapport
+31-05-2013
+Medlem har endvidere metoder, der er defineret i klassen. Disse metoder kræver, at der ud fra en instans af
+klassen kaldes den pågældende metode. I analysefasen er parameter, synlighed og returtype ikke angivet i
+operationerne, disse beskrives først i designfasen.
+4.4 S YSTEMINTERAKTIONSDIAGRAM
+Figur 9 - Systeminteraktionsdiagram
+Systeminteraktionsdiagrammet viser interaktionen mellem brugeren og systemet. I dette tilfælde omhandler
+det oprettelsen af en transaktion. Her ses blot, at der laves et kald med de angivne parametre. Det er ikke
+afgjort, hvilke typer de forskellige parametre skal bestå af, men blot hvad navne der er tildelt variablerne.
+Kaldet vises også som asynkront. Dette vil sige at der ikke gives svar tilbage til aktøren ved, at metoden
+udføres.
+4.5 K ONTRAKTER
+Kontrakt
+Operation
+Krydsreference
+Ansvar
+Output
+Prækondition
+Postkondition
+OpretTransaktion(tid, butiksnummer, medlemsnummer, produkt, pris)
+Opret transaktion
+Medlemsrangering
+Operationen skal sørge for, at transaktionen bliver gemt i databasen, og
+medlemmet, der foretager købet, bliver opgraderet, hvis medlemmet opfylder
+kravene til at blive opgraderet
+-
+Køb fundet sted
+Medlem instans eksisterer
+Oprettet transaktion
+Tilføjet point til medlemmets pointsum
+Opdateret medlemstype på medlem
+Figur 10 - Viser kontrakter
+Kontrakten beskriver metoden ”OpretTransaktion”, hvor der beskrives, hvilke krydsreferencer til
+brugsmønstre operationen skal indeholde.
+S i d e 19 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+Kontrakten er tildelt et ansvar. Den har til ansvar at oprette en transaktion i databasen i systemet og samtidigt
+tjekke medlemmets samlede forbrug inden for en periode af seneste opgradering, hvilket betyder, at hvis
+medlemmet, der foretager købet når et indkøb på over grænsen til en medlemstype, der har en højere
+grænse end brugerens nuværende medlemstype, har operationen også til ansvar at opgraderer medlemmets
+medlemstype til den nye.
+Operationen er asynkron og leverer intet output. Den kræver derimod, at både købet finder sted i en butik,
+samt at medlemmet eksisterer i systemet for at kunne gemme information omkring transaktionen.
+Når operationen har været udført, vil der være oprettet en transaktion i databasen. Der vil blive tilføjet
+Premium Points til medlemmet. Desuden vil medlemmets medlemstype være opdateret.
+4.6 K ORT KONKLUSION
+Der er forklaret, hvordan vi har benyttet de udvidet brugsmønster. Endvidere er der beskrevet, hvordan
+analyseklassediagrammet hænger sammen, med hvordan klasserne snakker med hinanden. Der har været
+en gennemgang af, hvad en klasse består af i analyse-aktiviteten. Der afklares, hvad
+systeminteraktionsdiagrammet indeholder og bruges til, samt hvad en kontrakt indeholder.
+Udbyttet af analyse-aktiviteten har været at skabe et overblik over, hvordan systemet ser ud. Dette er ikke
+fuldendt, eller færdigt, men et hurtigt udkast om hvilke operationer og variabler klasserne indeholder.
+Forbindelsen mellem dem er også vigtig for at kunne bygge videre på klassediagrammet. Kontrakterne er
+begyndelsen på at lave et mere detaljeret interaktionsdiagram, som skal sørge for, at operationen indeholder
+de kriterier, der blev krævet af brugsmønstret, og at operationen overholder sit ansvar over for systemet.
+S i d e 20 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+5 D ESIGN
+Designet
+af
+systemet
+bliver
+lavet
+ved
+at
+udvide
+analyseklassediagrammerne
+og
+systemsekvensdiagrammerne. Ved at tilføje andre muligheder til sekvensdiagrammet, som komposition,
+aggregeringer og datatyper på metoderne til designklassediagrammet, bliver det muligt at oversætte
+modellerne til kode og samtidig have et godt overblik over, hvordan klasserne skal snakke sammen. For at
+kunne se, hvordan det er blevet brugt, bliver det beskrevet fra en ende af.
+I designklassediagrammet er der blevet lavet aggregeringer/kompositioner mellem klasserne. Der er blevet
+taget højde for, om der har været behov for komposition eller aggression mellem de forskellige klasser. Det
+blev nøje overvejet, om der skulle være tale om nedarving, komposition eller aggregering. Det gode med
+nedarving er, at man kan genbruge kode, således at der ikke bliver tale om dobbeltarbejde. Der forstås ved
+nedarving, at en klasse arver egenskaber fra en anden klasse, så der f.eks. først kunne laves en klasse "Dyr".
+Koldblod og varmblod arver således fra Dyr, hvor at de arver de samme variabler og metoder, som Dyr
+indeholder, så hvis Dyr kan trække vejret, kan både varmblod og koldblod trække vejret. Forskellen vil så
+ligge efter nedarvingen, hvor varmblod har en bestemt kropstemperatur og bruger kroppen til at genererer
+varme, hvorimod koldblod benytter sig af andre former for metoder til at trække varme til sig. Begge dyr
+arver dog variablen "Varme" fra Dyr. Men de påvirker den på 2 forskellige måder, og derved sparer man kode
+ved at benytte nedarving. Det gør, at man ikke behøver at skrive det samme kode flere gange. Man har et
+hierarki af klasser, hvor den øverste klasse har de samme rettigheder og attributter som den på niveauet
+over, men ikke på niveauet under. På denne måde vil man kunne tilføje nye klasser til systemet, uden at
+skulle tænke på at få alle variabler og metoder fra alle de foregående klasser med. Man skal dog bare have
+for øje, at man opretter klassen det rigtige sted, så den ikke får rettigheder, som den ikke skal have, men har
+adgang til dem, som den skal have.
+Den anden mulighed var aggregering eller komposition. Det gode ved aggregering og komposition er, at der
+er tillæg til objektet ved at tage fat i andre objekter. Dette skal forstås ved, at man bruger andre objekter
+som variabler, og på den måde samler dem sammen til evt. nye objekter. Et eksempel kan være, at man har
+en bil, dens aggregeringer kunne være motor, hjul og bremser. Ved at oprette objektet bil, gør man brug af
+variablerne motor, hjul og bremser. De er nu en del af bilen og virker som tillæg, som i deres egne klasser
+bliver oprettet og beskrevet. Dette gør, at man har nemmere ved at ændre på systemet, uden at der er tale
+om en pyramide opsætning, ligesom det er tilfældet med nedarving. Systemet bliver mere fleksibelt. Der er
+bare ikke tale om samme faste struktur, som i nedarving, og det giver derfor ikke samme overblik.
+Efter at have udarbejdet analyseklassediagrammet blev det klart, at det ikke ville give mening at bruge
+nedarving. Der er ikke nogen af klasserne, som behøver samme rettigheder. Der er derimod tale om, at den
+ene klasse beskriver noget af den anden. Medlemstype beskriver for eksempel Medlem. Det giver derfor
+mest mening at bruge aggregering. Efter at dette blev vedtaget, så skulle der laves et designklassediagram.
+På designklassediagrammet kan man se de aggregeringer, der er blevet lavet imellem klasserne. Det var
+vigtigt, at det stod klart, hvor stærke aggregeringerne var imellem klasserne, så der var et overblik over, hvad
+kunne eksistere uden tilgang til noget andet. Det blev her besluttet, om der er tale om en aggregering eller
+komposition. Der er efterfølgende lavet get- og set metoder, samt defineret datatyper til de forskellige
+metoder. Derudover er synligheden af metoderne også tilføjet, således at man kan se, om en metode er
+privat eller public.
+S i d e 21 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+5.1 D ESIGNKLASSEDIAGRAMMET
+Ligesom at det var tilfældet med analyse afsnittet, bliver der her taget udgangspunkt i
+medlemsklassen. Som det fremgår af Figur 11 (side 22) 4 , er der aggregering i mellem medlemstype
+og medlemsklassen. Medlemsklassen gør brug af de egenskaber, der er i medlemstype, men den
+behøver ikke at nedarve fra den. Dette er gjort, fordi det gør det nemmere at ændre et medlems
+medlemstype, når denne bliver brugt som et objekt. Der er en aggregeringen imellem dem, da der
+ikke kan eksistere et medlem, uden en medlemstype. Når et medlem bliver oprettet, så bliver der
+tilknyttet en medlemstype, derfor er der en aggregeringen.
+Figur 11 - Designklassediagram
+4
+(Bilag\elaborationsfasen\3. Iteration\designklassediagram.jpg) for resten af designklassediagrammet
+S i d e 22 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+Der er blevet defineret, hvilke typer data metoderne skal resultere. Disse datatyper er fundet ved at kigge på
+de data, de enten skal hente eller behandle. Grunden til, at der er en boolean ved to af metoderne
+(redigerMedlem, opdaterMedlemstype), er for at vise, om kaldet er sket med eller uden fejl. I de tilfælde,
+hvor der skal hentes alle af en type, er der brugt et Array. Dette gør, at der kan oprettes en liste. Det har
+været vigtigt at tænke på, hvad disse data skal bruges til, når man vil lave en metode i klasserne. Dette kan
+ses på Figur 12. Metoderne skal bruges i kontrolleren. Der er ikke nogen, som ikke bliver brugt. Dette er gjort
+for at sikre høj sammenhørighed og lav kobling.
+Lav kobling og høj sammenhørighed opnås ved at sikre, at der ikke bliver brugt metoder og ansvarsområder,
+som ikke skal bruges andre steder i systemet. Det betyder, at man ikke laver en metode, som kun kalder
+noget i klassen, men hvor resultatet ikke bliver brugt overhovedet. Alle resultater bliver sendt op til
+kontrolleren, hvor man så får en oversigt over den. Man opnår større kvalitet og undgår problemer. Grunden
+til at benytte sig af lav kobling er, at man undgår at skulle rette i adskillige metoder ved, at der ændres i en
+enkelt metode længere nede i systemet.
+<<Entity>>
+Medlem
+-medlemsNummer: integer
+-navn: String
+-telefon: String
+-email: String
+-adresse: String
+-foedselsdag: Calendar
+-premiumPoint: double
+-medlemstype: Medlemstype
++Create(navn, telefon, adresse, email, foedselsdag, medlemsNummer, medlemstype,
+premiumPoint)
++redigerMedlem(navn, telefon, adresse, email, foedselsdag): boolean
++hentTransaktionsListe(): Transaktion[]
++hentPremiumPoints(): double
++hentNyMedlemstype(): Medlemstype
++opdatereMedlemstype(medlemstype): Boolean
++opretMedlem(navn, adresse, email, telefonnummer, foedselsdag): boolean
++hentAlleMedlemmer(): Medlem[]
++hentÅrligForbrug(): Double
++hentNavn(): String
++hentAdresse(): String
++hentEmail(): String
++hentTelefonnummer: String
++hentFoeselsdag(): Calendar
++hentMedlemsnummer(): integer
++hentMedlemstype(): Medlemstype
++beregnPremiumPoint(varepris): double
++opdaterMedlemstype(medlemstype): void
+Figur 12 - Viser medlemsentiteten fra designklassediagrammet
+S i d e 23 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+5.2 D ESIGNSEKVENSDIAGRAM
+Efter at have lavet designklassediagrammet, skal der laves sekvensdiagrammer, hvor de forskellige metoder
+beskrives. Der bliver taget højde for de variabler, der skal bruges. Dette gælder både kald og returværdier.
+Der bliver også taget højde for hvilke klasser, der afvikler hvilke hændelser. Disse bliver lavet ud fra
+designklassediagrammet. Dette gør, at man bagefter er i stand til at implementere metoderne direkte til
+kode. Som et eksempel, bruges brugsmønteret B06 – Opgradering af medlemstype 5 . Diagrammet kan ses på
+Figur (side 24). Der er blevet taget højde for hvilke klasser, der kalder hvilke og hvilke datatyper, der er i
+kaldene.
+Selve hændelsen bliver sat i gang af en transaktion. Der bliver fundet den butik, som købet bliver foretaget
+gennem. Butikkens id er tilknyttede butiksnummer og bliver hentet fra butiksklassen. Derefter hentes det
+medlem, som foretager købet. Denne hentes fra medlemsklassen. Derefter hentes den nye medlemstype.
+Da der er aggregering imellem medlemstype og medlem, så bliver denne også hentet fra medlem. Når dette
+er gjort, så skal der køre en if-sætning, som tjekker om den nye medlemstype er bedre end den nuværende.
+Dette bliver gjort, for at se om der er tale om en opgradering. Hvis dette er tilfældet, så opgraderes
+medlemstypen, og der sendes en mail til medlemmet. Dette bliver gjort fra mailserveren.
+Dette bliver gjort for alle brugsmønstrene, således det bliver fastlagt, hvordan alle sekvenser skal køre, og
+hvordan det skal kodes. Efter at dette er gjort, skal det hele implementeres til kode.
+Figur 13 - Designinteraktionsdiagram for opretTransaktion 6
+5
+6
+(Bilag\elaborationsfasen\2. Iteration\brugsmønstre\B06 - Opgradering af medlemstype.docx)
+Bilag\elaborationsfasen\3. Iteration\InteraktionsDiagram\B06 - Opgradering af medlemstype.jpg
+S i d e 24 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+5.3 L AGDELING
+Der er benyttet lagdeling i systemet. Dette er gjort for at opdele de forskellige dele af systemet. Det gør også,
+at det bliver nemmere at begrænse forbindelser mellem de forskellige lag, se Figur 13.
+I systemet er der tre forskellige lag. I øverst ligger
+brugergrænsefladen, som er den del med indhold af grafik,
+animationer og visning af data. Under dette lag ligger så
+domænet. Domænet indeholder systemets funktionalitet.
+Det er i dette lag, at udregninger og arrangering af data
+sker. Det er i det midterste lag, at data bliver omskrevet til
+læselige strenge, eller tal som brugergrænsefladen kan
+udtrække af domænet gennem kontrol-klassen i
+domænet. Under domænelaget ligger datalaget. Dette lag
+er det nederste lag, hvor data bliver gemt. Datalaget bliver
+kun kontaktet gennem domænet og returnerer data, der
+bliver bedt om fra domænet. Datalaget kan også gemme
+data til opbevaring og fremtidige forespørgsler fra
+domænet.
+Figur 13 - Viser lagdeling
+5.4 K ORT KONKLUSION
+Diagrammer i designaktiviteten udbygges fra den forhenværende analyseaktivitets diagrammer.
+Designaktiviteten indeholder flere detaljer omkring klasser, objekter og interaktion mellem disse. Dette giver
+et mere teknisk indblik i, hvordan det endelig produkt vil udfolde sig. Det er også det sidste skridt inden
+implementeringen af kode sker, da koden bliver genereret ud fra diagrammerne udviklet i designaktiviteten.
+Der er valgt at gøre brug af aggregering til at forklarer klasserne og gennemgået detaljeret gennemgang af
+klasser og designklassediagram.
+S i d e 25 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+6 D ATABASE
+Gruppen har benyttet PostgreSQL 7 , da dette var det DBMS underviseren brugte i faget Database. I de
+følgende afsnit, vil implementeringen af databasen blive beskrevet. Derefter følger afsnit, med beskrivelser
+af hvad der kunne være tilføjet af funktionalitet i databasen.
+6.1 F ØRSTE ITERATION
+Der blev i første iteration tilføjet en database til systemet. Denne blev lavet på baggrund af et E/R-diagram,
+som blev modelleret efter vores designdomænemodel. Hver klasse i designdomænediagrammet 8 har fået sin
+egen tabel, og hver attribut er oprettet som en kolonne i E/R diagrammet. Dette ses på Figur 14.
+Figur 14 - Viser E/R diagrammet
+Tabellen medlemstype har navn sat til at være den primære nøgle, da der blev antaget, at navnet på en
+medlemstype er unik. I modsætning har Medlem og Butik fået tildelt en separat attribut som deres
+primærnøgle, da deres data i princippet ikke behøver være unikt. Der kan godt være to butikker med samme
+navn i centeret, så derfor har vi valgt, at navnet ikke er unikt. Dog kunne man godt vælge at gøre navn unikt
+og så kræve, at hvis Netto havde to butikker, skulle nummer to butik f.eks. hedde Netto 2. Ud fra
+diagrammets nuværende form er det muligt at have et medlem i systemet, der har 100% identiske
+oplysninger, da det kun er medlemsnummeret, der er primærnøgle. Dette har gruppen valgt, da der ingen
+grund har været for begrænsning af, hvordan medlemmer bliver oprettet. Havde der været et log-ind som
+medlemmet kunne bruge, for at tjekke sine data, ville det give god mening at bruge e-mail som brugernavn,
+og derved skulle tabellen opdateres, så e-mail og medlemsnummer er en delt nøgle, eller slette
+7
+8
+(http://www.postgresql.org/)
+(Bilag\elaborationsfasen\3. Iteration\designklassediagram.jpg)
+S i d e 26 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+medlemsnummer og lade e-mail stå med som primær nøgle, eller gøre e-mail unik og undgå at ændre
+medlemsnummer.
+Transaktions tabellen er en svag entitet. Det betyder, at den ikke kan eksistere uden at have både et
+medlemsnummer og et butiksnummer. Dette gør, at vi ikke får noget redundant data og oplysninger om
+hvilket medlem, der har foretaget en transaktion i en bestemt butik, kun ligger gemt et sted. Skal man f.eks.
+finde alle transaktioner fra et medlem, vil man lave SQL, der sammenkæder Transaktionstabellen og
+Medlemstabellen. Et eksempel på dette kan ses af Figur 15.
+Figur 15 - SQL, der sammenkæder de to tabeller
+De steder hvor det har givet mening, er der tilføjet checks på kolonnerne. Dette betyder, at der f.eks. på
+medlemstype er et tjek, når man opdatere eller indsætter data, der sørger for, at multiplieren ikke kan være
+negativ. Et eksempel på dette kan ses af Figur 16.
+Figur 16 - Viser multiplier
+6.2 A NDEN ITERATION
+I forhold til de brugsmønstre der skulle laves i anden iteration, er der tilføjet to ekstra kolonner på
+henholdsvis Medlemstype og Medlem.
+Medlemstype er der tilføjet ”Graense”. Denne værdi indikerer, hvilket beløb et medlem skal have købt for,
+for at blive opgraderet eller nedgraderet til en bestemt medlemstype.
+På Medlem blev der tilføjet medlemstypeEftersyn, som er en dato. Denne attribut angiver, hvornår et
+medlem sidst er blevet opgraderet, eller tjekket for om medlemmet skal opgraderes. Det betyder, at det er
+denne værdi, der bliver beregnet ud fra, når man skal finde ud af, hvor meget et medlem har købt for i et
+givent interval. Som eksempel kan det siges, at hvis et medlem bliver oprettet i systemet d. 10-10-2013, er
+medlemstypeEftersyn sat til denne dato. Hvis medlemmet måneden efter har købt for 5000 kr., bliver han
+opgraderet til Sølv, og medlemstypeEftersyn bliver ændret til 10-11-2013. Det er derefter denne dato, der
+bliver brugt for at regne ud, hvornår man skal have købt for 5000 kr. igen for at forblive Sølv. Er man i forvejen
+Guld-medlem og bliver tjekket et år efter, vil medlemstypeEftersyn blive opdateret til denne dato, så man
+igen har et år til at købe for det beløb, der er nødvendigt til at forblive guld.
+6.3 T REDJE ITERATION
+I forhold til de brugsmønstre der blev lavet til tredje iteration, er der ingen ændringer i databasen. Dog var
+der en fejl i de foregående iterationer, som gjorde, at der på en transaktion kun blev gemt dato og ikke
+tidspunkt. Det var gemt som en SQL-dato, som ikke indeholder tidspunkt. Løsningen var at ændre det til et
+timestamp. Dette kan ses på Figur 17.
+S i d e 27 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+Figur 17 - Viser før/efter af SQL-dato
+Figur 18 (side 28) viser, hvordan scriptet til at oprette en transaktion ser ud. Her kan det ses, at der er tilføjet
+foreignkeys til butiksnummer og medlemsnummer. Dette gør, at når man opretter en transaktion, kræver
+det, at de numre, der bliver brugt til at oprette transaktionen, rent faktisk eksisterer i databasen i forvejen.
+Hvis ikke, sker der en fejl, og transaktionen bliver ikke oprettet. Derudover betyder SERIAL typen, at den
+automatisk tæller op på det transaktionsnummer, som unikt identificerer en transaktion. Det er også denne
+type, der bliver brugt på Medlem og Butik til medlemsnummer og butiksnummer.
+Figur 18 - Viser scriptet over transaktion
+6.4 T RIGGERS
+Gruppen har i projektet valgt at placere alt vores logik i Java koden. F.eks. bliver der tjekket, om et medlem
+skal opgraderes efter hver transaktion. Dette kunne gøres ved at oprette en trigger eller rule i PostgreSQL i
+stedet. Figur 19 viser, hvordan starten af en trigger kunne se ud. Der skulle herefter laves noget SQL, der
+opdaterer medlemstypen på et medlem, hvis man har nået grænsen til, hvornår man stiger til næste
+medlemstype. Grunden, til vi valgte ikke at gøre det på denne måde, er, at vi gerne ville sende en e-mail til
+medlemmet, når han stiger eller falder i medlemstype, og det er ikke muligt at gøre direkte fra PostgreSQL
+DBMS.
+Figur 19 - Viser starten af en trigger
+S i d e 28 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+7 IMPLEMENTERING OG TEST
+I det følgende afsnit vil der blive gennemgået, hvordan gruppen er kommet fra design-aktiviteten til konkret
+kode lavet i Java, og hvorledes databasen er blevet til ud fra E/R diagrammet. Der vil endvidere også blive
+beskrevet, hvad der er gjort for at implementeringen virker.
+7.1 D ESIGNKLASSEDIAGRAM TIL KODE
+Der blev i design-aktiviteten udarbejdet et designklassediagram, hvor der på baggrund af dette, kan udformes
+skeletter til de klasser, der er i diagrammet. Måden dette gøres på er ved at finde de klasser, som er mindst
+koblede og lave dem først. Den klasse, der er mindst koblet ifølge vores diagram 9 , er Medlemstype. Derefter
+giver det god mening at oprette Medlem, da den har en reference til Medlemstype, efter Butik og Transaktion
+blev oprettet og til sidst Center.
+Et eksempel på hvordan kode skelettet er oprettet ud fra designdomænediagrammet kan ses af Figur 20 (side
+29), hvor klassen Medlemstype er defineret.
+Figur 20 - Viser eksempel på kode skelettet
+De private attributter, som fremgår af Entiteten, er defineret i toppen af klassen, med dertilhørende
+synlighed og typer (Punkt 1). Konstruktøren er lavet, så den modtager de givne parametre og sætter de
+private attributter med den værdi, der bliver angivet (Punkt 2). Til sidst er metoderne tilføjet med den
+angivne synlighed og returtype (Punkt 3). Metoderne i denne klasse er alle hente-metoder til de private
+variabler, men alle andre metoder skulle laves med samme princip.
+7.2 D ESIGNINTERAKTIONSDIAGRAM TIL KODE
+Efter skelettet er oprettet, skal metoderne kodes, og alt logikken tilføjes. Dette kan gøres ud fra de
+designinteraktionsdiagrammer, der blev udarbejdet. I aktivitets- og designafsnittet blev brugsmønsteret
+9
+(Bilag\elaborationsfasen\3. Iteration\designklassediagram.jpg)
+S i d e 29 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+B03 Oprettelse af Transaktion 10 gennemgået. Designinteraktionsdiagrammet for dette brugsmønster kan
+ses af Figur 21.
+Figur 21 - Designinteraktionsdiagram for opretTransaktion
+Der er to udgaver af dette designinteraktionsdiagram - det i første iteration 11 , hvor der ikke bliver tjekket,
+hvorvidt et medlem skal opgraderes. Dette blev først tilføjet i iteration to, opdateret i iteration tre og er det
+diagram, der vil blive gennemgået her.
+Selve diagrammet starter, når centeret ønsker at oprette en transaktion. Der fremgår af diagrammet, at der
+bliver kaldt en metode ind i facade klasse (Control). Denne metode tager de nødvendige parametre med for
+at kunne oprette kaldet. Figur 22 (side 31) viser, hvordan metoden ser ud på facade-klassen. Det kan ses ud
+fra diagrammet, at der først kaldes en statisk metode på klassen butik, som returnere et butiks-objekt. Der
+gøres det samme for at hente et medlems-objekt, dog bare ved at kalde en statisk metode på medlems-
+klassen. Herefter kalder man metoden opretTransaktion på den konkrete instans af den butik, man har
+fundet.
+Metoderne hentNyMedlemsType og hentMedlemsype bliver begge gemt som variabler i metoden, så de kan
+blive brugt i if-sætningen, for at tjekke om medlemmet skal opgraderes til en ny medlemstype. Hvis det er
+tilfældet, bliver opdaterMedlemstype kaldt på den konkrete instans af medlemmet, og der bliver kaldt en
+statisk metode på MailSender klassen, så medlemmet kan modtage en e-mail.
+10
+11
+(Bilag\elaborationsfasen\1. Iteration\brugsmønstre\B03 - Oprettelse af transaktioner.docx)
+(Bilag\elaborationsfasen\1. Iteration\interaktionsdiagrammer\B06 - Oprettelse af transaktion.jpg)
+S i d e 30 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+Figur 22 – Viser implementering af ’opretTransaktion’
+7.3 E/R DIAGRAM TIL SQL
+Til den relationelle database er der oprettet et E/R diagram 12 , på baggrund af dette blev der oprettet SQL til
+hver tabel. Scriptet til at oprette en tabel kan ses af Figur 23, hvor hver attribut bliver gemt i databasen. Navn
+er gemt som en VARCHAR, som betyder, at det er af variabel længde, dog maksimalt 100 tegn langt.
+Telefonnummer er gemt som en CHAR, hvilket betyder, at den altid er 8 tegn lang i databasen. Forskellen er,
+at en VARCHAR ændrer størrelse efter hvor meget, der bliver tilføjet, og en CHAR altid har den størrelse, man
+angiver.
+Der er også lagt lidt logik ind i denne tabel, f.eks. når man opretter et nyt medlem, er Medlemstype sat til
+som standard at være Bronze, og når man ændrer medlemstypen, skal det være enten Bronze, Sølv eller
+Guld. Hvis man prøver at ændre til for eksempel Platinum, vil update-scriptet fejle, og der vil ske en fejl i Java-
+koden.
+Figur 23 - Viser SQL oprettet efter E/R diagrammet
+7.4 K OMMUNIKATION IMELLEM J AVA KODE OG DATABASE
+Når der skal kommunikeres med databasen fra Java, sker det via en ODBC driver, som stiller de nødvendige
+værktøjer til rådighed i Java, hvilket giver mulighed for at oprette forbindelse og eksekvere SQL.
+Fremgangsmåden har været således, at der først blev testet og lavet de SQL script, der skulle bruges i et
+andet program, for derefter at implementere dem i Java. På Figur 24 (side 32) kan man se, hvordan koden er
+opbygget til at kommunikere med databasen. På linje 4 er den aktuelle SQL, der ønskes at blive udført. Her
+bliver alle værdierne, der skal gemmes, anført med hver sit spørgsmålstegn. Der bliver derefter oprettet et
+PreparedStatement objekt. Dette objekt hjælper med at tilføje værdierne til SQL scriptet. Grunden til at
+12
+(Bilag\elaborationsfasen\2. Iteration\ER-diagram.png)
+S i d e 31 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+bruge et PreparedStatement er, at det sørger for at normalisere de data man tilføjer, så der f.eks. ikke kan
+se SQL injections.
+Figur 24 - Viser hvordan koden er opbygget til at kommunikere med databasen
+7.5 T EST
+Ved implementering af kode kræves det, at der testes, at metoderne tager imod rigtige parametre og
+returnerer de forventede værdier. Der er flere forskellige måder at teste kode på. Dette kan gøres ved hjælp
+af en ”unit-test”, som tester en enkelt metode ad gangen. Test kan også udføres på et større plan, hvor en
+række af metoder bliver testet, ved at enkelte metoder kalder videre ned i systemets domæne til yderligere
+metoder.
+Unit-test udføres som standard før et større system-tjek udføres. Dette gøres, så man ikke støder på fejl i
+systemtesten uden at vide, hvor fejlen befinder sig i systemet.
+Der er gjort brug af test ved ”Trial’n’Error”. Det er blevet gjort ved at lave en konsolbrugergrænseflade. Denne
+brugergrænseflade har således lavet kald af metoder ned igennem systemet. Ved fejl har koden indeholdt
+”exceptions” med printning af fejlen. Dette betød at ”Stacktrace” kunne gennemgås, og derved kunne fejlen
+isoleres.
+Der har yderligere været brug af SQL-kode. Dette er blevet testet enkeltvis ved at opstille testdata og udfører
+de pågældende kald i databasen. Ved udførsel af disse tests var der et forventet resultat, og derfor var det
+nemt at indikere, om det forventede resultat blev det udbytte kaldet gav tilbage, eller om udbyttet var et
+helt andet. Var det tilfældet, blev koden rettet til, så den gav det ønskede resultat.
+S i d e 32 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+8 E VALUERING
+Det har været spændende at få udleveret en aktuel case af et rigtigt firma. Der blev derfor hurtigt vedtaget,
+at der var en fælles forventning om at lave et ordentligt og tilfredsstillende projekt. Der havde fra starten
+været en fælles forståelse og idé af, hvad der skulle udvikles, og hvordan det skulle gribes an. Gruppen kom
+derfor fra starten på bølgelængde og var klar til at gå i gang med arbejdet som et fælles team. Alle var
+desuden klar over, at UP-metoden skulle anvendes, og at gruppen skulle udvikle et program i Java, samt
+database i PostgreSQL. Der har været meget læring omkring anvendelsen af metoderne igennem
+undervisningen, og gruppen har desuden fundet det håndgribeligt at arbejde med i forbindelse med
+projektet.
+Ved anvendelse af metoderne inden for kravudviklingen har gruppen udviklet og opstillet de krav, som var
+relevante for gruppens projekt. Der kom man frem til, at der skulle være hovedfokus på Premium Point
+Manager, og der blev udviklet krav dertil af gruppens medlemmer. Gruppen har tidligere opstillet krav i det
+forrige semesterprojekt og der var fælles forståelse for, hvordan dette skulle gøre.
+Brugsmønstre og brugsmønsterbeskrivelser var nyt i anvendelse for flere af os. Siden hen har vi, grundet
+løbende aktivt arbejde med stoffet, samt skabt en fælles forståelse af dette.
+Gruppen har løbende haft et rigtig godt samarbejde med vejlederen, som har været meget aktivt svarende
+på mails og ændrede aftalte mødetider, hvis det ikke passede gruppen.
+Der har på gruppen været mange fælles diskussioner omhandlende for eksempel programmering eller
+designet på systeminteraktionsdiagram. Diskussionerne har aldrig eskaleret til større uenigheder, og i langt
+de fleste tilfælde ført til en forbedret viden omkring det faglige på området hos flere af medlemmerne i
+gruppen.
+Der skulle desuden også udarbejdes systeminteraktionsdiagrammer, som også blev udarbejdet ved
+fællesdiskussion. Til systeminteraktionsdiagrammerne blev der skrevet kontrakter. Da der var blevet lavet
+kontrakter før i en tidligere afleveringsopgave, kunne kontrakterne også udarbejdes, så de var passende til
+diagrammet.
+Gruppen har været gode til at uddele arbejdet ligeligt og ikke efter kunnen, hvilket betød at medlemmer i
+gruppen, der ikke havde den samme mængde erfaring inde for bestemte fagpunkter, blev sat til opgaver,
+hvor de blev udfordret, i stedet for opgaver de på forhånd kunne løse uden yderligere besvær. Dette har
+betydet, at nogle processor har taget længere tid end forventet, men har således også udviklet kompetencer
+hos gruppes medlemmer.
+S i d e 33 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+9 K ONKLUSION
+Kravene fra Netcompany til programmet er opfyldt, og gruppen har konstrueret et program, som vil hjælpe
+WA med udviklingen af deres loyalitets program.
+Det er lykkedes at oprette krav i forbindelse med den problemstilling, der er blevet stillet fra Netcompany.
+Dette har betydet, at der efterfølgende har kunnet udvikles brugsmønstre for at løse de angivne krav i forhold
+til, hvad opgaven stillede. Ud fra den opstillede case, har ”Premium Point Manager”-delen, været valgt at
+løse til systemet. Det vil oprette transaktioner og overvåge medlemmets specifikke medlemstype, som vil
+sammenligne forbrug, så medlemsrangeringen kan korrigeres.
+Der er blevet benyttet UP-metoden i projektet sammen med en tidsplan for opgaver, der kræves løst i
+inceptions- og elaborationsfasen. Det er lykkedes at bruge UML i forbindelse med udvikling af modeller til
+brug af modellering af systemet. Dette har været udviklet ud fra brugsmønstre og domænemodel.
+I analyseafsnittet er det lykkedes at tilføje yderligere detaljer og få et større overblik over, hvordan et
+fuldendt system vil fremstå i forhold til de opstillede krav og brugsmønstre fra inceptionsfasen.
+Analyse har været brugt til at skabe et analyseklassediagram, der fungerer som et samlet overblik over
+systemet. Der har yderligere været en forklaring af operationer i systemet gennem de udvidede
+brugsmønstre, hvortil der har været udviklet systemsekvensdiagrammer. Disse har været brugt til at vise kald
+til systemet fra en brugergrænseflade. Der har endvidere været en kontrakt over disse operationer for at
+gengive, hvad operationen står til at skulle udfører, ved at have et før- og efterbillede. Desuden har
+kontrakten indeholdt et ansvar, som operationen skulle opfylde.
+Designaktiviteten har succesfuldt bygget videre på klassediagram og sekvensdiagrammer således, at
+designklassediagrammet har indeholdt alle former for variabler og metoder, som domæne-systemet
+indeholder. De udviklede systemsekvensdiagrammer(designinteraktionsdiagrammer), stopper ikke ved
+kontrolklassen til systemet, men fortsætter videre ned i systemet og gengiver, hvad hver metode i systemet
+står til at kalde, og hvad den specifikke metode skal returnere.
+Efter gennemførsel af design har der været en generering af kode til at bygge systemet op i Java. Dette har
+været bygget på baggrund af de modeller, der har været udviklet gennem designaktiviteten. Det har lykkedes
+at lave et system i Java med funktionalitet, der gør det muligt at oprette et medlem, oprette en butik, oprette
+transaktioner, ændre medlemsinformationer og justerer medlemmer efter regler gengivet i oplæg.
+Medlemmer, medlemstyper, butikker og transaktioner har fået tildelt en plads i en database, der endvidere
+har været oprettet, så alt data ikke mistes ved at systemet evt. slukkes. Disse data er mulige at hente gennem
+kontrolklassen ”Datakontrol”, der ligger som bund i domænet.
+S i d e 34 | 35Projektgruppe - 2
+SB2/IT2-ORG-U1-1
+Syddansk Universitet
+Det Tekniske Fakultet
+Produktrapport
+31-05-2013
+10 L ITTERATURLISTE
+Litteratur 1: Arlow, Jim & Neustadt, Ila, UML 2 and the Unified Process. Practical Object-Oriented Analysis
+And Design. 2nd edition. Addison-Wesley, 2005.
+Litteratur 2: Garcia-Molina, Hector; Ullman, Jeffrey; Widon, Jennifer, Database Systems, The Complete Book.
+Internal Version, 2nd edition.
+Litteratur 3: Horstmann, Cay S. Big Java, 4th edition, International Student Version.
+Litteratur 4: Jones, Gareth, Organizational Theory, Design And Change. 7ed, 2013.
+S i d e 35 | 35

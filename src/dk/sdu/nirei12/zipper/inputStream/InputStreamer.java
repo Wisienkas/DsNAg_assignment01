@@ -50,11 +50,12 @@ public class InputStreamer {
 	public int readBit() throws IOException{
 		int result = 0;
 		try{
-			if(btb == null){
+			if(btb == null || !btb.hasNextBit()){
 				btb = new ByteToBits(readByte());
 			}
 			result += btb.nextBit() ? 1 : 0;
 		}catch (EOFException eof){
+			br.close();
 			result = -1;
 		}catch(Exception e){
 			try{
