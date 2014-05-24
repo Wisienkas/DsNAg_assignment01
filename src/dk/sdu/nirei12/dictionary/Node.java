@@ -35,7 +35,7 @@ public class Node {
 			}else{
 				this.left.addNode(key);
 			}
-		}else if(key > this.key){
+		}else if(key >= this.key){
 			if(this.right == null){
 				this.right = new Node(this, key);
 			}else{
