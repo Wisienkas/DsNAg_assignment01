@@ -6,7 +6,7 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import dk.sdu.nirei12.zipper.datastructure.BitsToByte;
+import dk.sdu.nirei12.zipper.BitsToByte;
 
 public class BitsToByteTester {
 

@@ -1,53 +1,51 @@
 package dk.sdu.nirei12.priorityqueue;
 
-import algorithms.ArrayGenerator;
-import algorithms.ArrayUtils;
 
 /**
  * @author nirei12 & thora12
  */
 public class PQHeap implements PQ {
 	
-	// Used to verify the heap, think of it as a unittest. Dont worry about it
-	public static void main(String[] args) {
-		try{
-			System.out.println("Creating Random Array");
-			Integer[] A = ArrayGenerator.makeRandomArray(1000000, 1, 9999999);
-			System.out.println("Array Done!");
-			System.out.println("Inserting into heap!");
-			PQHeap pq = new PQHeap(1);
-			for (Integer integer : A) {
-				pq.Insert(new Element(integer, null));
-			}
-			if(!pq.verifyHeap(0)){
-				System.out.println("NOT CORRECT HEAP!");
-				System.exit(1);
-			}
-			System.out.println("Insertion Done!");
-			Element[] heap = pq.getArray();
-//			for (int i = 0; i < A.length; i++) {
-//				System.out.print(heap[i].key + ", ");
+//	// Used to verify the heap, think of it as a unittest. Dont worry about it
+//	public static void main(String[] args) {
+//		try{
+//			System.out.println("Creating Random Array");
+//			Integer[] A = ArrayGenerator.makeRandomArray(1000000, 1, 9999999);
+//			System.out.println("Array Done!");
+//			System.out.println("Inserting into heap!");
+//			PQHeap pq = new PQHeap(1);
+//			for (Integer integer : A) {
+//				pq.Insert(new Element(integer, null));
 //			}
-			
-			for (int i = 0; i < A.length; i++) {
-				A[i] = pq.extractMin().key;
-//				System.out.println("\nexstract: ");
-				heap = pq.getArray();
-//				for (int j = 0; j < A.length - i - 1; j++) {
-//					System.out.print(heap[j].key + ", ");
-//				}
-			}
-			System.out.println("Verifying Array sorted!");
-			if(ArrayUtils.verifyArraySorted(A)){
-				System.out.println("passed!");
-				System.out.println("length of A: " + A.length);
-			}else{
-				System.out.println("failed!");
-			}
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-	}
+//			if(!pq.verifyHeap(0)){
+//				System.out.println("NOT CORRECT HEAP!");
+//				System.exit(1);
+//			}
+//			System.out.println("Insertion Done!");
+//			Element[] heap = pq.getArray();
+////			for (int i = 0; i < A.length; i++) {
+////				System.out.print(heap[i].key + ", ");
+////			}
+//			
+//			for (int i = 0; i < A.length; i++) {
+//				A[i] = pq.extractMin().key;
+////				System.out.println("\nexstract: ");
+//				heap = pq.getArray();
+////				for (int j = 0; j < A.length - i - 1; j++) {
+////					System.out.print(heap[j].key + ", ");
+////				}
+//			}
+//			System.out.println("Verifying Array sorted!");
+//			if(ArrayUtils.verifyArraySorted(A)){
+//				System.out.println("passed!");
+//				System.out.println("length of A: " + A.length);
+//			}else{
+//				System.out.println("failed!");
+//			}
+//		}catch (Exception e){
+//			e.printStackTrace();
+//		}
+//	}
 
     private Element[] heap;
     private int currentElements;

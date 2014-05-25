@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import dk.sdu.nirei12.priorityqueue.Element;
-import dk.sdu.nirei12.zipper.datastructure.StringToBits;
 
 public class CharTreeNode extends Element{
 	

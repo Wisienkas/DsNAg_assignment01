@@ -1,4 +1,4 @@
-package dk.sdu.nirei12.zipper.datastructure;
+package dk.sdu.nirei12.zipper;
 
 public class StringToBits {
 	

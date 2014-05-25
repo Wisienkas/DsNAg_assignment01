@@ -1,4 +1,4 @@
-package dk.sdu.nirei12.zipper.outputStream;
+package dk.sdu.nirei12.zipper;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import dk.sdu.nirei12.zipper.datastructure.BitsToByte;
 
 public class OutputStreamer {
 	

@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import dk.sdu.nirei12.zipper.inputStream.InputStreamer;
-import dk.sdu.nirei12.zipper.outputStream.OutputStreamer;
 
 /**
  * Of course this has to be run in a thread of its own!
@@ -54,6 +52,7 @@ public class Encode implements Runnable{
 		// creates and insert into the heap
 		CharCountHeap cch = new CharCountHeap();
 		countingUp(is, cch);
+		System.out.println(totalChars);
 		// creates the optimized tree
 		CharTreeNode ctn = cch.processOptimizedTree();
 		Map<Object, Object> map = new HashMap<Object, Object>();
@@ -61,32 +60,9 @@ public class Encode implements Runnable{
 		OutputStreamer os = new OutputStreamer(out);
 		is = new InputStreamer(in);
 		convert(os, is, map);
-		long outSize = readSize(out);
-		writeStatistics(outSize);
+		long outSize = Util.readSize(out);
+		Util.writeStatistics(outSize, totalChars, size);
 	}
-
-	private void writeStatistics(long outSize) {
-		System.out.println("Output size of file should be: \t" + ((size / 8) + 1024) + " bytes");
-		System.out.println("Output size of file was: \t" + outSize + " bytes");
-		System.out.println("Original size of file was: \t" + (totalChars) + " bytes");
-		System.out.println("reduction in size to = \t\t" + (outSize * 8 * 100) / (totalChars * 8) + "%");
-	}
-
-	private long readSize(File out2) {
-		System.out.println("Counting bytes in file");
-		long bytes = 0;
-		try {
-			FileReader fr = new FileReader(out2);
-			while(fr.read() != -1){
-				bytes++;
-			}
-			fr.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return bytes;
-	}
-
 
 	/** Write from input file to output file */
 	private void convert(OutputStreamer os, InputStreamer is, Map map) {
@@ -125,7 +101,16 @@ public class Encode implements Runnable{
 
 	/** Will create the header! */
 	private void makeHeader(OutputStreamer os) throws IOException {
+		long headerCount = 0;
 		for (int c : chars) {
+//			headerCount += c;
+//			for (int i = 0; i < 4; i++) {
+//				int divisor = (int)Math.pow(256, 3 - i);
+//				int result = c / divisor;
+//				os.writeByte(result);
+//				c = c - result * divisor;
+//			}
+//			System.out.println("c should be 0... c: " + c);
 			int sampler = 1;
 			sampler <<= 31;
 			for (int i = 0; i < 4; i++) {
@@ -138,6 +123,7 @@ public class Encode implements Runnable{
 				os.writeByte(bitbyte);
 			}
 		}
+		System.out.println(headerCount);
 	}
 
 	/** Adds the char count to an int array from the file to be encoded */

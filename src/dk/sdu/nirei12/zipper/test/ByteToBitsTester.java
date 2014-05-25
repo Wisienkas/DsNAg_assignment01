@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import dk.sdu.nirei12.zipper.datastructure.ByteToBits;
+import dk.sdu.nirei12.zipper.ByteToBits;
 
 public class ByteToBitsTester {
 

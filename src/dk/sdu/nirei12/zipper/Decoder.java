@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import dk.sdu.nirei12.zipper.inputStream.InputStreamer;
-import dk.sdu.nirei12.zipper.outputStream.OutputStreamer;
 
 public class Decoder implements Runnable {
 
@@ -26,6 +24,7 @@ public class Decoder implements Runnable {
 	private File in, out;
 	private int[] chars = new int[256];
 	private long totalChars = 0;
+	private int loops;
 
 	public Decoder(File in, File out) {
 		this.in = in;
@@ -44,23 +43,28 @@ public class Decoder implements Runnable {
 			}
 		}
 		CharTreeNode ctn = cch.processOptimizedTree();
-		 Map<Object, Object> map = new HashMap<Object, Object>();
-		 cch.makeMap(ctn, map);
 		convert(ctn);
+		// REST IS ONLY STATISTICS!
+		long outputSize = Util.readSize(out);
+		long inputSize = Util.readSize(in);
+		System.out.println("Encoded File was: \t" + inputSize + " MB!");
+		System.out.println("Decoded File was: \t" + outputSize + " MB!");
 		System.out.println("Decoding finished to file: " + out.getName());
 	}
+
 
 	private void convert(CharTreeNode ctn) {
 		OutputStreamer os = new OutputStreamer(out);
 		InputStreamer is = new InputStreamer(in);
 		try {
 			is.setupStream();
+			// Skipping header
 			for (int i = 0; i < 1024; i++) {
 				is.readByte();
 			}
 			os.startStream();
 			int input = is.readBit();
-			long loops = 0;
+			loops = 0;
 			CharTreeNode node = ctn;
 //			String path = "";
 			node.key--;
@@ -82,6 +86,11 @@ public class Decoder implements Runnable {
 				}
 				input = is.readBit();
 			}
+			if(loops != totalChars){
+				System.out.println("Missing some chars in decoded file!");
+			}else{
+				System.out.println("stopped normally last input was : " + input);
+			}
 			os.endFile();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -102,7 +111,7 @@ public class Decoder implements Runnable {
 						System.err.println("BUGGY!");
 						System.exit(1);
 					}
-					chars[i] += (int) (Math.pow(0xff, 3 - j) * input);
+					chars[i] += (int) (Math.pow(256, 3 - j) * input);
 				}
 				totalChars += chars[i];
 			}

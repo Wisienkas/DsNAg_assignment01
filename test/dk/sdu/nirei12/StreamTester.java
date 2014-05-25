@@ -8,10 +8,10 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import dk.sdu.nirei12.zipper.datastructure.BitsToByte;
-import dk.sdu.nirei12.zipper.datastructure.ByteToBits;
-import dk.sdu.nirei12.zipper.inputStream.InputStreamer;
-import dk.sdu.nirei12.zipper.outputStream.OutputStreamer;
+import dk.sdu.nirei12.zipper.BitsToByte;
+import dk.sdu.nirei12.zipper.ByteToBits;
+import dk.sdu.nirei12.zipper.InputStreamer;
+import dk.sdu.nirei12.zipper.OutputStreamer;
 
 public class StreamTester {
 

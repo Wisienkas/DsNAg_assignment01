@@ -1,4 +1,4 @@
-package dk.sdu.nirei12.zipper.inputStream;
+package dk.sdu.nirei12.zipper;
 
 import java.io.BufferedReader;
 import java.io.EOFException;
@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import dk.sdu.nirei12.zipper.datastructure.ByteToBits;
 
 public class InputStreamer {
 
